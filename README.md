@@ -20,3 +20,4 @@ App functionalities:
 
 Other things to be done:
 - The admin panel still has to be created.
+![Screenshot (76)](https://user-images.githubusercontent.com/96835372/150337046-a68e3936-e6ab-41f0-8c84-f2acfe0e6f75.png)
