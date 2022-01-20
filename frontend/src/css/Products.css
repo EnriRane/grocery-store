@@ -1,0 +1,8 @@
+.products {
+  background-image: url("../../public/backgroundImages/cart.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.paginate {
+  margin-top: 5%;
+}

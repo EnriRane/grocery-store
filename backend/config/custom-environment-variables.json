@@ -1,0 +1,4 @@
+{
+  "jwtPrivateKey": "groceryStore_jwtPrivateKey",
+  "stripeKey": "groceryStore_stripeKey"
+}

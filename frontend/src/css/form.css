@@ -1,0 +1,26 @@
+.form {
+  padding: 15%;
+  /* background-color: #cce5ff; */
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.registerForm {
+  background-image: url("../../public/backgroundImages/register.jpg");
+}
+.form h1 {
+  color: #e15d44;
+}
+.form form {
+  color: white;
+}
+.loginForm {
+  background-image: url("../../public/backgroundImages/login.jpg");
+  background-color: #45b8ac;
+}
+.profileForm {
+  background-image: url("../../public/backgroundImages/profile.jpg");
+  background-color: #45b8ac;
+}
+.loginForm h1 {
+  color: #45b8ac;
+}

@@ -1,0 +1,33 @@
+h2 {
+  font-family: "Pushster";
+}
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  font-size: 30px;
+  text-align: center;
+}
+
+.flex-item-left {
+  background-color: #f1f1f1;
+  padding: 10px;
+  flex: 75%;
+}
+
+.flex-item-right {
+  background-color: rgb(15, 221, 211);
+  padding: 2%;
+  flex: 20%;
+  margin: 1% 2%;
+}
+
+/* Responsive layout - makes a one column-layout instead of two-column layout */
+@media (max-width: 500px) {
+  .flex-container {
+    flex-direction: column;
+  }
+
+  .flex-item-right {
+    margin: 0;
+  }
+}
