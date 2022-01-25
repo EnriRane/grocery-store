@@ -1,24 +1,28 @@
 import React from "react";
+import { useContext } from "react";
 import Product from "./common/Product";
 import Pagination from "./common/Pagination";
-import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../reducers/products";
-import { changePage, getPageNumber } from "../reducers/pageData";
+import ProductContext from "../context/ProductContext";
+import PageContext from "../context/PageContext";
+import SearchContext from "../context/SearchContext";
+import { getPageNumber } from "../reducer/pageData";
+import * as pageDataAction from "../constants/pageDataConstant";
 import { paginate } from "../utils/paginate";
 const Products = () => {
-  const dispatch = useDispatch();
-  let allProducts = useSelector(getProducts);
-  const searchQuery = useSelector((state) => state.groceryStore.searchQuery);
-  const currentPage = useSelector(getPageNumber);
+  let allProducts = useContext(ProductContext);
+  const [searchQuery] = useContext(SearchContext);
+  const [pageData, dispatchPage] = useContext(PageContext);
+
+  const currentPage = getPageNumber(pageData);
   const handlePageChange = (page) => {
-    dispatch(changePage(page));
+    dispatchPage({ type: pageDataAction.CHANGE_PAGE, payload: page });
   };
   if (searchQuery) {
     allProducts = allProducts.filter((product) =>
       product.name.toLowerCase().includes(searchQuery)
     );
   }
-  const products = paginate(allProducts, currentPage, 4);
+  const products = paginate(allProducts, currentPage, 10);
   return (
     <React.Fragment>
       <h2>List of Products</h2>
@@ -36,7 +40,7 @@ const Products = () => {
       <div className="paginate">
         <Pagination
           itemsCount={allProducts.length}
-          pageSize={4}
+          pageSize={10}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />

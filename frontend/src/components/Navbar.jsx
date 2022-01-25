@@ -1,19 +1,27 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { addSearch } from "../reducers/search";
-import { cartSize } from "../reducers/cart";
+import UserContext from "../context/UserContext";
+import SearchContext from "../context/SearchContext";
+import PageContext from "../context/PageContext";
+import CartContext from "../context/CartContext";
+import { getUser } from "../reducer/users";
+import * as pageDataAction from "../constants/pageDataConstant";
+import * as searchAction from "../constants/searchConstant";
 import "../css/Navbar.css";
-import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../reducers/users";
-const Navbar = (props) => {
-  const sizeOfCart = useSelector(cartSize);
-  const user = useSelector(getUser);
-  const dispatch = useDispatch();
+const Navbar = () => {
+  const [cart, dispatchCart] = useContext(CartContext);
+  const [users] = useContext(UserContext);
+  const [searchQuery, dispatchSearch] = useContext(SearchContext);
+  const [pageData, dispatchPage] = useContext(PageContext);
+
+  const user = getUser(users);
   const handleSearch = (value) => {
-    dispatch(addSearch(value));
+    dispatchPage({ type: pageDataAction.CHANGE_PAGE, payload: 1 });
+    dispatchSearch({ type: searchAction.ADD_SEARCH, payload: value });
   };
   const className = () => {
     let name = "fa fa-shopping-cart ";
-    if (sizeOfCart) name = name + "icon";
+    if (cart.length !== 0) name = name + "icon";
     return name;
   };
   return (
@@ -22,7 +30,7 @@ const Navbar = (props) => {
         <i className="fa fa-fw fa-home"></i>&nbsp; Grocery Store
       </NavLink>
       <NavLink to="/cart">
-        <i className={className()} value={sizeOfCart} />
+        <i className={className()} value={cart.length} />
         My cart
       </NavLink>
       <NavLink to="/contact">

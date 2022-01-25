@@ -1,10 +1,11 @@
 import { toast } from "react-toastify";
 import authService from "../../services/authService";
 import * as orderService from "../../services/orderService";
-import { emptyCart } from "../../reducers/cart";
-import { useDispatch } from "react-redux";
+import { useContext } from "react";
+import CartContext from "../../context/CartContext";
+import * as cartAction from "../../constants/cartConstant";
 const PaymentButton = ({ totalPrice, products }) => {
-  const dispatch = useDispatch();
+  const [cart, dispatchCart] = useContext(CartContext);
   const handleClick = async () => {
     var answer = window.confirm("Do you want to proceed to payment?");
     if (answer) {
@@ -32,7 +33,7 @@ const PaymentButton = ({ totalPrice, products }) => {
           status: "Pending",
         });
         toast.success("Your order was placed successfully!");
-        dispatch(emptyCart);
+        dispatchCart({ type: cartAction.EMPTY_CART });
         setTimeout(() => {
           window.location = "/";
         }, 3000);

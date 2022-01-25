@@ -1,8 +1,8 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 import Form from "./common/form";
 import authService from "../services/authService";
 import "../css/form.css";
-import { Navigate } from "react-router-dom";
 class LoginForm extends Form {
   state = {
     data: { email: "", password: "" },

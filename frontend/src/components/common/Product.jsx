@@ -1,16 +1,17 @@
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
 import _ from "lodash";
-import { addtoCart } from "../../reducers/cart";
-import { getCartProducts } from "../../reducers/cart";
-import { getProductImage } from "../../reducers/products";
+import { Link } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import ProductContext from "../../context/ProductContext";
+import CartContext from "../../context/CartContext";
+import { getProductImage } from "../../reducer/products";
 import "../../css/Product.css";
 
+import * as cartAction from "../../constants/cartConstant";
 const Product = ({ enabled, product, totalQuantitySold }) => {
-  const cartProducts = useSelector(getCartProducts);
-  const imagePath = useSelector(getProductImage(product._id));
-  const dispatch = useDispatch();
+  const [cart, dispatchCart] = useContext(CartContext);
+  const cartProducts = [...cart];
+  const products = useContext(ProductContext);
+  const imagePath = getProductImage(products)(product._id);
 
   const [color, setColor] = useState("black");
   const [buttonName, setButtonName] = useState("Add to Cart");
@@ -22,7 +23,7 @@ const Product = ({ enabled, product, totalQuantitySold }) => {
 
   const addToCard = (product) => {
     addToCartEffect();
-    dispatch(addtoCart(product));
+    dispatchCart({ type: cartAction.ADD_TO_CART, payload: product });
   };
   const getProperty = (name) => {
     return _.get(product, name);

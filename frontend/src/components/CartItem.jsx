@@ -1,15 +1,11 @@
-import {
-  addQuantityOfProduct,
-  deleteFromCart,
-  decreaseQuantityOfProduct,
-} from "../reducers/cart";
+import { useState, useContext } from "react";
 import Delete from "./common/Delete";
+import CartContext from "../context/CartContext";
+import * as cartAction from "../constants/cartConstant";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
 
 const CartItem = ({ product }) => {
-  const dispatch = useDispatch();
+  const [cart, dispatchCart] = useContext(CartContext);
   const [quantity, setQuantity] = useState(
     product.quantity ? product.quantity : 1
   );
@@ -21,7 +17,10 @@ const CartItem = ({ product }) => {
       return;
     }
     setQuantity(quantity - 1);
-    dispatch(decreaseQuantityOfProduct({ product, quantity }));
+    dispatchCart({
+      type: cartAction.DECREASE_QUANTITY_OF_PRODUCT,
+      payload: { product, quantity },
+    });
   };
   const handlePlus = () => {
     if (quantity === product.numberInStock) {
@@ -32,10 +31,13 @@ const CartItem = ({ product }) => {
     }
 
     setQuantity(quantity + 1);
-    dispatch(addQuantityOfProduct({ product, quantity }));
+    dispatchCart({
+      type: cartAction.ADD_QUANTITY_OF_PRODUCT,
+      payload: { product, quantity },
+    });
   };
   const handleDelete = () => {
-    dispatch(deleteFromCart(product));
+    dispatchCart({ type: cartAction.DELETE_FROM_CART, payload: product });
   };
   return (
     <div className="d-flex flex-row justify-content-between align-items-center p-2 bg-white mt-4 px-3 rounded">

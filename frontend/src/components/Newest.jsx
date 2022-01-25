@@ -1,8 +1,10 @@
-import { useSelector } from "react-redux";
+import { useContext } from "react";
 import Product from "./common/Product";
-import { getNewProducts } from "../reducers/products";
+import ProductContext from "../context/ProductContext";
+import { getNewProducts } from "../reducer/products";
 const Newest = (props) => {
-  const products = useSelector(getNewProducts);
+  const allProducts = useContext(ProductContext);
+  const products = getNewProducts(allProducts);
   return (
     <div>
       <h2>Newest</h2>

@@ -1,42 +1,58 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useEffect, useReducer } from "react";
 import MostSold from "./MostSold";
 import Newest from "./Newest";
 import Products from "./Products";
-import { addProducts } from "../reducers/products";
-import { changePage } from "../reducers/pageData";
-import { addMostSoldProducts } from "../reducers/mostSold";
 import * as productService from "../services/productService";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import ProductContext from "../context/ProductContext";
+import MostSoldContext from "../context/MostSoldContext";
+import PageContext from "../context/PageContext";
+import { mostSoldReducer } from "../reducer/mostSold";
+import { productReducer } from "../reducer/products";
+import * as mostSoldAction from "../constants/mostSoldConstant";
+import * as pageDataAction from "../constants/pageDataConstant";
+import * as productAction from "../constants/productConstant";
 import "../css/MainContainer.css";
 import "../css/Products.css";
 const MainContainer = () => {
-  const dispatch = useDispatch();
+  const [allProducts, dispatchProducts] = useReducer(productReducer, []);
+  const [mostSoldProducts, dispatchMostSold] = useReducer(mostSoldReducer, []);
+  const [pageData, dispatchPage] = useContext(PageContext);
   useEffect(() => {
     const getProductsAndMostSoldProducts = async () => {
       try {
         const { data: products } = await productService.getAllProducts();
         const { data: mostSold } = await productService.getMostSoldProducts();
-        dispatch(addProducts(products));
-        dispatch(addMostSoldProducts(mostSold));
-        dispatch(changePage(1));
+        dispatchProducts({
+          type: productAction.ADD_PRODUCTS,
+          payload: products,
+        });
+        dispatchMostSold({
+          type: mostSoldAction.ADD_MOST_SOLD_PRODUCTS,
+          payload: mostSold,
+        });
+        dispatchPage({ type: pageDataAction.CHANGE_PAGE, payload: 1 });
       } catch (ex) {
         console.error(ex);
       }
     };
     getProductsAndMostSoldProducts();
-  }, [dispatch]);
+  }, [dispatchProducts]);
   return (
     <React.Fragment>
-      <div className="flex-container " id="mainContainer">
-        <div className="flex-item-left products">
-          <Products />
-        </div>
-        <div className="flex-item-right">
-          <MostSold />
-          <Newest />
-        </div>
-      </div>
+      <ProductContext.Provider value={allProducts}>
+        <MostSoldContext.Provider value={mostSoldProducts}>
+          <div className="flex-container " id="mainContainer">
+            <div className="flex-item-left products">
+              <Products />
+            </div>
+            <div className="flex-item-right">
+              <MostSold />
+              <Newest />
+            </div>
+          </div>
+        </MostSoldContext.Provider>
+      </ProductContext.Provider>
     </React.Fragment>
   );
 };

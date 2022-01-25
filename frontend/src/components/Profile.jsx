@@ -1,20 +1,21 @@
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { useSelector } from "react-redux";
-import { getUser } from "../reducers/users";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useNavigate } from "react-router-dom";
-import authService from "../services/authService";
-import { Navigate } from "react-router-dom";
+import UserContext from "../context/UserContext";
+import { getUser } from "../reducer/users";
 
 const Profile = () => {
-  const user = useSelector(getUser);
+  const [users] = useContext(UserContext);
+  const user = getUser(users);
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`/changeInfo/${user._id}`);
   };
-  if (!authService.getCurrentUser()) {
+  if (!user) {
     return <Navigate to="/" />;
   }
   return (

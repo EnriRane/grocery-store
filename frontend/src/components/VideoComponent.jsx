@@ -1,9 +1,11 @@
-import { useSelector } from "react-redux";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../context/UserContext";
+import { getUser } from "../reducer/users";
 import "../css/VideoComponent.css";
-import { getUser } from "../reducers/users";
 const VideoComponent = (props) => {
-  const user = useSelector(getUser);
+  const [users] = useContext(UserContext);
+  const user = getUser(users);
   const navigate = useNavigate();
   const handleClick = () => {
     navigate("/register");

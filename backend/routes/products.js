@@ -4,7 +4,7 @@ const router = express.Router();
 const { Product, validateProduct } = require("../models/product");
 
 router.get("/", async (req, res) => {
-  const products = await Product.find().sort("name");
+  const products = await Product.find();
   res.send(products);
 });
 
@@ -12,9 +12,10 @@ router.post("/", async (req, res) => {
   const { error } = validateProduct(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const productExists = Product.find({ name: req.body.name });
-  if (productExists) return res.status(400).send("Product already exists");
-
+  const products = await Product.find({ name: req.body.name });
+  if (products.length !== 0) {
+    return res.status(400).send("Product already exists");
+  }
   const product = new Product(
     _.pick(
       req.body,

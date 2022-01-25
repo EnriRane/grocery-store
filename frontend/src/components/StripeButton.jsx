@@ -2,11 +2,13 @@ import StripeCheckout from "react-stripe-checkout";
 import http from "../services/httpService";
 import config from "../config.json";
 import * as orderService from "../services/orderService";
+import * as cartAction from "../constants/cartConstant";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { emptyCart } from "../reducers/cart";
+
+import { useContext } from "react";
+import CartContext from "../context/CartContext";
 const StripeButton = ({ products, totalPrice, user }) => {
-  const dispatch = useDispatch();
+  const [cart, dispatchCart] = useContext(CartContext);
 
   const handleToken = async (token) => {
     const orderedProducts = products.map((product) =>
@@ -29,7 +31,7 @@ const StripeButton = ({ products, totalPrice, user }) => {
           status: "Pending",
         });
         toast.success("Your order was placed successfully!");
-        dispatch(emptyCart);
+        dispatchCart({ type: cartAction.EMPTY_CART });
         setTimeout(() => {
           window.location = "/";
         }, 3000);

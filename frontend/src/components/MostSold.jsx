@@ -1,8 +1,8 @@
+import { useContext } from "react";
 import Product from "./common/Product";
-import { useSelector } from "react-redux";
-import { getMostSoldProducts } from "../reducers/mostSold";
+import MostSoldContext from "../context/MostSoldContext";
 const MostSold = () => {
-  const products = useSelector(getMostSoldProducts);
+  const products = useContext(MostSoldContext);
   return (
     <div>
       <h2>Most Sold</h2>

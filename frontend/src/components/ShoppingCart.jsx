@@ -1,12 +1,18 @@
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 import CartItems from "./CartItems";
 import PaymentButton from "./common/paymentButton";
-import { useSelector } from "react-redux";
-import { getCartProducts, getTotalPrice } from "../reducers/cart";
 import OnlinePayment from "./OnlinePayment";
-import { Link } from "react-router-dom";
+import CartContext from "../context/CartContext";
+import UserContext from "../context/UserContext";
+import { getTotalPrice } from "../reducer/cart";
+import { getUser } from "../reducer/users";
 const ShoppingCart = () => {
-  const products = useSelector(getCartProducts);
-  const totalPrice = useSelector(getTotalPrice);
+  const [cart, dispatchCart] = useContext(CartContext);
+  const [users, dispatchUser] = useContext(UserContext);
+  const user = getUser(users);
+  const products = [...cart];
+  const totalPrice = getTotalPrice(cart);
   if (products.length === 0) {
     return (
       <h2
@@ -36,7 +42,7 @@ const ShoppingCart = () => {
           </h4>
           <h6 style={{ margin: "5%" }}>
             Order will be send in your current{" "}
-            <Link to="/profile">address</Link> !
+            <Link to={user ? "/profile" : "/login"}>address</Link> !
           </h6>
           <PaymentButton products={products} totalPrice={totalPrice} />
           <OnlinePayment products={products} totalPrice={totalPrice} />
